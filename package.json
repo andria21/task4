@@ -1,0 +1,31 @@
+{
+  "name": "block-me",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "axios": "^1.5.1",
+    "bcryptjs": "^2.4.3",
+    "bootstrap": "^5.3.2",
+    "cookie": "^0.5.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "6.12.0",
+    "next": "13.5.4",
+    "next-auth": "^4.23.2",
+    "react": "^18",
+    "react-bootstrap": "^2.9.0",
+    "react-dom": "^18",
+    "sass": "^1.68.0",
+    "styled-components": "^6.0.8",
+    "swr": "^2.2.4"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "13.5.4"
+  }
+}
