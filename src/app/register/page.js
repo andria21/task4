@@ -11,16 +11,12 @@ import {
   Button,
 } from "./page.module";
 import { useState } from "react";
-import { useSession } from "next-auth/react";
 
 export default function Register() {
   const [err, setErr] = useState("");
 
   const router = useRouter();
-  const session = useSession();
   
-  // session.status === "authenticated" && router.push("/");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const name = e.target[0].value;

@@ -13,15 +13,20 @@ import {
   Button,
   RegisterButton,
   ButtonsContainer,
+  CenteredSpinnerContainer,
+  Spinner
 } from "./page.module";
-import axios, { AxiosError } from "axios";
 
 export default function page() {
   const session = useSession();
   const router = useRouter();
 
   if (session.status === "loading") {
-    return <p>Loading...</p>;
+    return (
+      <CenteredSpinnerContainer>
+        <Spinner />
+      </CenteredSpinnerContainer>
+    );
   }
 
   session.status === "authenticated" && router.push("/");

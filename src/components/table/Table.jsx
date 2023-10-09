@@ -8,51 +8,52 @@ import {
   TableDIv,
 } from "./table.module";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import useSWR from "swr";
 import dynamic from "next/dynamic";
 import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 const Table = () => {
-  const [selectedUserIds, setSelectedUserIds] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-  const { data, mutate, error, isLoading } = useSWR(`/api/users`, fetcher);
+  const { data, mutate, isLoading } = useSWR(`/api/users`, fetcher);
 
-  const router = useRouter();
   const session = useSession();
 
-  const toggleCheckbox = (userId) => {
-    setSelectedUserIds((prevSelectedUserIds) => {
-      if (userId === "master") {
-        return prevSelectedUserIds.length === data.length ? [] : data.map((user) => user._id);
+  const toggleCheckbox = (userId, userEmail) => {
+    setSelectedUsers((prevSelectedUsers) => {
+      if (prevSelectedUsers.some((user) => user.userId === userId)) {
+        return prevSelectedUsers.filter((user) => user.userId !== userId);
       } else {
-        return prevSelectedUserIds.includes(userId)
-          ? prevSelectedUserIds.filter((id) => id !== userId)
-          : [...prevSelectedUserIds, userId];
+        return [...prevSelectedUsers, { userId, userEmail }];
       }
     });
   };
-  // log out user on deletion of the acc...
-  const handleBlock = async (buttonName, methodName) => {
+
+  const handleBlock = async (buttonName) => {
+    const selectedUserIds = selectedUsers.map((user) => user.userId);
     try {
       await fetch(`/api/users/`, {
-        method: `${methodName}`,
-        body:
-          buttonName === "block" || "unblock"
-            ? JSON.stringify({
-                ids: selectedUserIds,
-                buttonName,
-              })
-            : JSON.stringify({ ids: selectedUserIds }),
+        method: "POST",
+        body: JSON.stringify({
+          ids: selectedUserIds,
+          buttonName,
+        }),
       });
       mutate();
-      setSelectedUserIds([]);
+      setSelectedUsers([]);
       setSelectAll(false);
+      if (buttonName === "delete") {
+        selectedUsers.forEach((user) => {
+          if (user.userEmail === session.data.user.email) {
+            signOut();
+          }
+        });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -60,10 +61,11 @@ const Table = () => {
 
   const handleSelectAll = () => {
     if (selectAll) {
-      setSelectedUserIds([]);
+      setSelectedUsers([]);
     } else {
-      const allUserIds = data.map((user) => user._id);
-      setSelectedUserIds(allUserIds);
+      setSelectedUsers(
+        data.map((user) => ({ userId: user._id, userEmail: user.email }))
+      );
     }
     setSelectAll(!selectAll);
   };
@@ -71,15 +73,11 @@ const Table = () => {
   return (
     <MainDiv>
       <TableDIv>
-        <BlockButton onClick={() => handleBlock("block", "POST")}>
-          Block
-        </BlockButton>
-        <BlockButton onClick={() => handleBlock("unblock", "POST")}>
+        <BlockButton onClick={() => handleBlock("block")}>Block</BlockButton>
+        <BlockButton onClick={() => handleBlock("unblock")}>
           Unblock
         </BlockButton>
-        <BlockButton onClick={() => handleBlock("delete", "DELETE")}>
-          Delete
-        </BlockButton>
+        <BlockButton onClick={() => handleBlock("delete")}>Delete</BlockButton>
 
         <TableContainer>
           <thead>
@@ -104,7 +102,6 @@ const Table = () => {
                   if (user.isBlocked || user.isDeleted) {
                     if (session.data.user.email === user.email) {
                       signOut();
-                      // if acc is deleted we need to handel it
                     }
                   }
                 } catch (error) {
@@ -115,8 +112,10 @@ const Table = () => {
                     <Td>
                       <input
                         type="checkbox"
-                        checked={selectedUserIds.includes(user._id)}
-                        onChange={() => toggleCheckbox(user._id)}
+                        checked={selectedUsers.some(
+                          (u) => u.userId === user._id
+                        )}
+                        onChange={() => toggleCheckbox(user._id, user.email)}
                       />
                     </Td>
                     <Td>{user.name}</Td>

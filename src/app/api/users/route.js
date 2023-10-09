@@ -25,11 +25,13 @@ export const POST = async (req) => {
         { _id: { $in: userIds } },
         { $set: { isBlocked: true } }
       );
-    } else {
+    } else if (name === "unblock") {
       await User.updateMany(
         { _id: { $in: userIds } },
         { $set: { isBlocked: false } }
       );
+    } else {
+      await User.deleteMany({ _id: { $in: userIds } });
     }
 
     return new NextResponse("Success", { status: 200 });
@@ -38,19 +40,19 @@ export const POST = async (req) => {
   }
 };
 
-export const DELETE = async (req) => {
-  try {
-    await connect();
-    const body = await req.json();
-    const userIds = body.ids;
+// export const DELETE = async (req) => {
+//   try {
+//     await connect();
+//     const body = await req.json();
+//     const userIds = body.ids;
 
-    await User.deleteMany(
-      { _id: { $in: userIds } },
-      { $pull: { _id: userIds } }
-    );
+//     await User.deleteMany(
+//       { _id: { $in: userIds } },
+//       { $pull: { _id: userIds } }
+//     );
 
-    return new NextResponse("Success", { status: 200 });
-  } catch (error) {
-    return new NextResponse("Database Error", { status: 500 });
-  }
-};
+//     return new NextResponse("Success", { status: 200 });
+//   } catch (error) {
+//     return new NextResponse("Database Error", { status: 500 });
+//   }
+// };

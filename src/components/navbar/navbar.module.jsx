@@ -11,12 +11,13 @@ export const NavContainer = styled.div`
 
 export const Logout = styled.a`
   margin-left: 20px;
-  background-color: #141414;
+  background-color: #222;
   border: 1px solid rgba(54, 54, 54, 0.6);
   font-weight: 600;
   position: relative;
   outline: none;
-  border-radius: 50px;
+  border-radius: 4px;
+  border-style: none;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,4 +25,13 @@ export const Logout = styled.a`
   height: 39px;
   width: 110px;
   opacity: 1;
+  box-sizing: border-box;
+  font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
+  touch-action: manipulation;
+  &:hover {
+    opacity: 0.75;
+  }
+  &:focus {
+    opacity: 0.75;
+  }
 `;
