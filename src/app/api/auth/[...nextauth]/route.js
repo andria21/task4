@@ -14,6 +14,7 @@ const handler = NextAuth({
 
         try {
           const user = await User.findOne({ email: credentials.email });
+          if(user.isBlocked) throw Error("This account is blocked!");
           if (user) {
             const isPasswordCorrect = await bcrypt.compare(
               credentials.password,
