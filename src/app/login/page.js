@@ -55,7 +55,7 @@ export default function page() {
         </FormGroup>
         <ButtonsContainer>
           <Button type="submit">Login</Button>
-          <RegisterButton type="text" onClick={() => router.push("/register")}>
+          <RegisterButton onClick={() => router.push("/register")}>
             - Create a new account -
           </RegisterButton>
         </ButtonsContainer>

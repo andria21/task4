@@ -60,9 +60,9 @@ export const Button = styled.button`
   }
 `;
 
-export const RegisterButton = styled.button`
+export const RegisterButton = styled.a`
   display: inline-block;
-  padding: 0.6em 1.7em;
+  padding: 0.6em;
   border: none;
   margin: 0 0.3em 0.3em 0;
   border-radius: 0.12em;
