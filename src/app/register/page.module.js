@@ -52,6 +52,7 @@ export const Button = styled.button`
   padding: 10px 40px;
   position: relative;
   border: 2px solid #ffffff;
+  width: 40%;
   cursor: pointer;
   &:hover {
     color: #000000;
@@ -59,22 +60,30 @@ export const Button = styled.button`
   }
 `;
 
-export const RegisterButton = styled.button`
+export const LoginButton = styled.a`
   display: inline-block;
-  padding: 0.6em 1.7em;
-  border: 0.1em solid #ffffff;
+  padding: 0.6em;
+  border: none;
   margin: 0 0.3em 0.3em 0;
   border-radius: 0.12em;
   box-sizing: border-box;
   text-decoration: none;
   font-family: "Roboto", sans-serif;
   font-weight: 300;
-  color: #000000;
+  color: #fff;
   text-align: center;
   transition: all 0.2s;
+  width: 49%;
+  background-color: #191919;
   cursor: pointer;
   &:hover {
-    color: #ffffff;
-    background-color: #000000;
+    color: #113946;
   }
+`;
+
+export const ButtonsContainer = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 10px;
 `;

@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 export default function Home() {
   const session = useSession();
   const router = useRouter();
+  const name = session?.data?.user.name;
 
   if (session.status === "loading") {
     return (
@@ -26,11 +27,12 @@ export default function Home() {
   if (session.status === "unauthenticated") {
     router?.push("/login");
   }
-  
+
+  // willson fisk ara is...
   return (
     <div>
       <div>
-        <Navbar name="Willson Fisk" />
+        <Navbar name={name} />
         <TableContainer>
           <Table />
         </TableContainer>

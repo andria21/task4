@@ -9,6 +9,8 @@ import {
   Label,
   Input,
   Button,
+  LoginButton,
+  ButtonsContainer,
 } from "./page.module";
 import { useState } from "react";
 
@@ -16,7 +18,7 @@ export default function Register() {
   const [err, setErr] = useState("");
 
   const router = useRouter();
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const name = e.target[0].value;
@@ -59,7 +61,12 @@ export default function Register() {
           <Label>Password:</Label>
           <Input type="password" id="password" name="password" required />
         </FormGroup>
-        <Button>Submit</Button>
+        <ButtonsContainer>
+          <Button>Submit</Button>
+          <LoginButton onClick={() => router.push("/login")}>
+            - Already have an account -
+          </LoginButton>
+        </ButtonsContainer>
       </RegisterForm>
       {err && err}
     </RegisterContainer>
