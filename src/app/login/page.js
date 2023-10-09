@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 
 import {
@@ -16,10 +16,15 @@ import {
   CenteredSpinnerContainer,
   Spinner
 } from "./page.module";
+import useSWR from "swr";
 
-export default function page() {
+export default function Login() {
   const session = useSession();
   const router = useRouter();
+
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
+  const { data, isLoading } = useSWR(`/api/users`, fetcher);
 
   if (session.status === "loading") {
     return (
@@ -39,6 +44,16 @@ export default function page() {
     const password = e.target[1].value;
 
     signIn("credentials", { email, password });
+
+    try {
+      !isLoading && data.map(user => {
+        if (user.email === email && user.isBlocked) {
+          alert("This account has been blocked!")
+        }
+      })
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
